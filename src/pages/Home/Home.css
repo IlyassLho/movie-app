@@ -1,0 +1,79 @@
+.home-page h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  /* margin-bottom: 2rem; */
+  
+  /* Applying the logo's gradient */
+  background: linear-gradient(to right, #36bdf2, #6f42c1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block; /* Important for gradient text to work */
+}
+
+/* --- Movies Grid Container --- */
+.movies-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 5px;
+}
+
+/* --- The Movie Card Itself --- */
+.movie-card {
+  background-color: #ffffff; /* White background for the card */
+  color: #333; /* Dark text, matching "Flicks" from logo */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  overflow: hidden; /* Keeps the image corners rounded */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.no-image-placeholder {
+  width: 100%;
+  height: 300px;
+  background-color: #444; /* لون رمادي داكن */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ccc;
+  font-size: 1.1rem;
+  padding: 10px;
+}
+
+.movie-card-link {
+  text-decoration: none; /* نحيدو السطر التحتاني */
+  color: inherit; /* باش ياخد اللون من الـ parent ديالو */
+}
+
+.movie-card:hover {
+  transform: translateY(-5px); /* Lifts the card up slightly */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
+
+.movie-card img {
+  width: 100%;
+  height: 300px; /* Fixed height for all posters */
+  object-fit: cover; /* Ensures image fills the space without stretching */
+  display: block;
+}
+
+/* --- Card Info Section --- */
+.movie-card-info {
+  padding: 10px 5px 10px 0;
+}
+
+.movie-card-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-card-info p {
+  font-size: 0.9rem;
+  color: #777; /* Lighter text for the year */
+  margin: 0;
+}
