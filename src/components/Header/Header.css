@@ -1,0 +1,48 @@
+/* src/components/Header.css */
+.main-header {
+  background-color: #222; /* خلفية سوداء */
+  color: #fff; /* النص أبيض */
+  padding: 1rem 2rem; /* مسافة داخلية */
+  display: flex; /* باش اللوغو والـ nav يجيو فسطر واحد */
+  justify-content: space-between; /* اللوغو فاليسار والـ nav فليمين */
+  align-items: center; /* الوسط */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* ضل خفيف */
+}
+
+.logo {
+  font-size: 1.8rem; /* حجم اللوغو */
+  font-weight: bold; /* غليظ */
+  display: flex; /* باش الـ span ماتجيش فسطر جديد */
+  align-items: center;
+}
+
+.logo span {
+  background: linear-gradient(to bottom, #36bdf2, #6f42c1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-left: 5px;
+}
+
+.main-nav ul {
+  list-style: none; /* نحيدو النقط ديال الـ list */
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.main-nav li {
+  margin-left: 20px; /* المسافة بين الروابط */
+}
+
+.main-nav a {
+  color: #fff;
+  text-decoration: none; /* نحيدو السطر التحتاني من الرابط */
+  font-weight: 500;
+  transition: color 0.3s ease; /* تأثير فاش يدوز الماوس */
+}
+
+.main-nav a:hover,
+.main-nav a.active { /* الستايل فاش يدوز الماوس أو يكون الرابط نشيط */
+  color: #36bdf2;
+}

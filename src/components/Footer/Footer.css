@@ -1,0 +1,13 @@
+.main-footer {
+  background-color: #222; /* نفس لون الـ Header */
+  color: #aaa; /* لون باهت شوية */
+  padding: 1rem 2rem;
+  text-align: center; /* باش يجي النص فالوسط */
+  font-size: 0.9rem; /* خط أصغر شوية */
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.4); /* ضل خفيف الفوق */
+  margin-top: auto; /* هادي مهمة باش تدفع الـ Footer ديما لتحت */
+}
+
+.main-footer p {
+  margin: 5px 0; /* مسافة خفيفة بين الأسطر */
+}
