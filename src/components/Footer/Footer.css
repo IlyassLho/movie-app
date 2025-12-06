@@ -1,13 +1,19 @@
 .main-footer {
-  background-color: #222; /* نفس لون الـ Header */
-  color: #aaa; /* لون باهت شوية */
+  background-color: #222;
+  color: #aaa;
   padding: 1rem 2rem;
-  text-align: center; /* باش يجي النص فالوسط */
-  font-size: 0.9rem; /* خط أصغر شوية */
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.4); /* ضل خفيف الفوق */
-  margin-top: auto; /* هادي مهمة باش تدفع الـ Footer ديما لتحت */
+  text-align: center;
+  font-size: 0.9rem;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.4);
+  margin-top: auto;
 }
 
 .main-footer p {
-  margin: 5px 0; /* مسافة خفيفة بين الأسطر */
+  margin: 5px 0;
+}
+
+.main-footer p a{
+  padding: 0px 10px;
+  font-size: 13px;
+  color: #36bdf2;
 }
