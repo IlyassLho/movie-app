@@ -10,7 +10,7 @@ function Footer() {
         &copy; {currentYear} Ily Flicks. All rights reserved.
       </p>
       <p>
-        Developed by Ilyass.
+        Developed by <a href="https://ilyaslhouari.netlify.app/" target='_blank'>ILYAS LHOUARI</a>
       </p>
     </footer>
   );
