@@ -5,10 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
-  /* --- THIS IS THE DARK THEME CHANGE --- */
-  background-color: #333; /* Dark grey background */
-  color: #eee; /* Light text for readability */
+  background-color: #333;
+  color: #eee;
 }
 
 .app-container {
