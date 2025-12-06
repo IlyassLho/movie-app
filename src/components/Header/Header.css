@@ -1,18 +1,17 @@
-/* src/components/Header.css */
 .main-header {
-  background-color: #222; /* خلفية سوداء */
-  color: #fff; /* النص أبيض */
-  padding: 1rem 2rem; /* مسافة داخلية */
-  display: flex; /* باش اللوغو والـ nav يجيو فسطر واحد */
-  justify-content: space-between; /* اللوغو فاليسار والـ nav فليمين */
-  align-items: center; /* الوسط */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* ضل خفيف */
+  background-color: #222;
+  color: #fff;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .logo {
-  font-size: 1.8rem; /* حجم اللوغو */
-  font-weight: bold; /* غليظ */
-  display: flex; /* باش الـ span ماتجيش فسطر جديد */
+  font-size: 1.8rem;
+  font-weight: bold;
+  display: flex;
   align-items: center;
 }
 
@@ -24,25 +23,85 @@
   margin-left: 5px;
 }
 
-.main-nav ul {
-  list-style: none; /* نحيدو النقط ديال الـ list */
-  margin: 0;
-  padding: 0;
+.search-form {
   display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
-.main-nav li {
-  margin-left: 20px; /* المسافة بين الروابط */
-}
-
-.main-nav a {
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #444;
+  border-radius: 20px;
+  background-color: #333;
   color: #fff;
-  text-decoration: none; /* نحيدو السطر التحتاني من الرابط */
-  font-weight: 500;
-  transition: color 0.3s ease; /* تأثير فاش يدوز الماوس */
+  width: 250px;
+  transition: all 0.3s ease;
 }
 
-.main-nav a:hover,
-.main-nav a.active { /* الستايل فاش يدوز الماوس أو يكون الرابط نشيط */
-  color: #36bdf2;
+.search-input:focus {
+  outline: none;
+  border-color: #36bdf2;
+  background-color: #444;
+}
+
+.search-input::placeholder {
+  color: #aaa;
+}
+
+.search-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(to right, #36bdf2, #6f42c1);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.search-button:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* تعديل بسيط باش Search bar يبان مزيان فالهواتف */
+@media (max-width: 768px) {
+  .main-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .search-form {
+    width: 90vw;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .search-input:focus .search-button {
+    display: block;
+  }
+
+  .search-button {
+    display: none;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(to right, #36bdf2, #6f42c1);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .search-button:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
 }
