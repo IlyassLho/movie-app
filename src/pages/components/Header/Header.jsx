@@ -1,10 +1,11 @@
 import { useState, useEffect , useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
   const inputRef = useRef(null);
 
   // Debounce Search
@@ -14,14 +15,26 @@ function Header() {
       if (searchQuery.trim() !== '') {
         navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
       } else {
-        navigate('/');
+        if (location.pathname === '/search') {
+          navigate('/');
+        }
       }
     }, 700);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery, navigate]);
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]); 
 
-  // Handle Submit
+  // Clear Search on Navigation Away from Search Page
+  useEffect(() => {
+    if (!location.pathname.startsWith('/search')) {
+      setSearchQuery('');
+    }
+  }, [location.pathname]);
+
+
+  // Handle Submit (Enter)
   const handleSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim() !== '') {
@@ -36,7 +49,11 @@ function Header() {
   return (
     <header className="main-header">
       <div className="logo">
-        <Link to="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+        <Link 
+          to="/" 
+          onClick={() => setSearchQuery('')}
+          style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}
+        >
           🎬 Ily<span>Flicks</span>
         </Link>
       </div>
