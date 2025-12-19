@@ -1,15 +1,13 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 // Components
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-
+import Header from './pages/components/Header/Header';
+import Footer from './pages/components/Footer/Footer';
 // Pages
-import Home from './pages/Home/Home';
-import MovieDetailPage from './pages/MovieDetail/MovieDetailPage';
-
-import './App.css';
+import HomePage from './pages/Home/HomePage';
+import DetailsPage from './pages/Home/DetailsPage';
+import SearchPage from './pages/Home/SearchPage';
+// Styles
+import './Style/App.css';
 
 function App() {
   return (
@@ -18,8 +16,10 @@ function App() {
         <Header />
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/detail/:imdb_id" element={<MovieDetailPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/:type/:slug" element={<DetailsPage />} />
+
           </Routes>
         </main>
         <Footer />
