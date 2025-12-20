@@ -13,8 +13,12 @@ const IMAGE_BACKDROP_URL = 'https://image.tmdb.org/t/p/original';
 function DetailsPage() {
     const { type, slug } = useParams();
 
+    // State Variables
     const [content, setContent] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [trailerKey, setTrailerKey] = useState(null);
+    const [openingKey, setOpeningKey] = useState(null);
+    const [playingVideo, setPlayingVideo] = useState(null); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,16 +26,35 @@ function DetailsPage() {
                 const decryptedId = decodeId(slug);
                 if (!decryptedId) throw new Error("Invalid ID");
 
-                const response = await axios.get(`${API_BASE_URL}/${type}/${decryptedId}`, {
-                    params: {
-                        api_key: API_KEY,
-                        language: 'en-US'
-                    }
-                });
+                const [detailsRes, videosRes] = await Promise.all([
+                    // Request 1: Details
+                    axios.get(`${API_BASE_URL}/${type}/${decryptedId}`, {
+                        params: { api_key: API_KEY, language: 'en-US' }
+                    }),
+                    // Request 2: Trailers/Videos
+                    axios.get(`${API_BASE_URL}/${type}/${decryptedId}/videos`, {
+                        params: { api_key: API_KEY, language: 'en-US' }
+                    })
+                ]);
 
-                setContent(response.data);
+                setContent(detailsRes.data);
+
+                const videos = videosRes.data.results;
+                // Trailer
+                const trailer = videos.find(
+                    (vid) => vid.type === "Trailer" && vid.site === "YouTube"
+                );
+                
+                // Opening Credits
+                const opening = videos.find(
+                    (vid) => vid.type === "Opening Credits" && vid.site === "YouTube"
+                );
+
+                if (trailer) setTrailerKey(trailer.key);
+                if (opening) setOpeningKey(opening.key);
+
             } catch (err) {
-                console.error("Error or Invalid ID:", err);
+                console.error("Error fetching data:", err);
             } finally {
                 setLoading(false);
             }
@@ -88,6 +111,21 @@ function DetailsPage() {
                             <span key={g.id} className="genre-badge">{g.name}</span>
                         ))}
                     </div>
+                    
+                    {/* Action Buttons */}
+                    <div className="action-buttons">
+                        {trailerKey && (
+                            <button className="play-trailer-btn" onClick={() => setPlayingVideo(trailerKey)}>
+                                ▶ Play Trailer
+                            </button>
+                        )}
+
+                        {openingKey && (
+                            <button className="play-trailer-btn" onClick={() => setPlayingVideo(openingKey)}>
+                                🎵 Opening Credits
+                            </button>
+                        )}
+                    </div>
 
                     <div className="detail-overview">
                         <h3>Overview</h3>
@@ -95,6 +133,22 @@ function DetailsPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Video Modal */}
+            {playingVideo && (
+                <div className="video-modal" onClick={() => setPlayingVideo(null)}>
+                    <div className="video-container">
+                        <iframe
+                            src={`https://www.youtube.com/embed/${playingVideo}?autoplay=1`}
+                            title="Trailer"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
+                        <button className="close-video-btn" onClick={() => setPlayingVideo(null)}>✖</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
