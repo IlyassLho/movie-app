@@ -19,6 +19,7 @@ function DetailsPage() {
     const [trailerKey, setTrailerKey] = useState(null);
     const [openingKey, setOpeningKey] = useState(null);
     const [playingVideo, setPlayingVideo] = useState(null); 
+    const [cast, setCast] = useState([]); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,7 +27,7 @@ function DetailsPage() {
                 const decryptedId = decodeId(slug);
                 if (!decryptedId) throw new Error("Invalid ID");
 
-                const [detailsRes, videosRes] = await Promise.all([
+                const [detailsRes, videosRes, creditsRes] = await Promise.all([
                     // Request 1: Details
                     axios.get(`${API_BASE_URL}/${type}/${decryptedId}`, {
                         params: { api_key: API_KEY, language: 'en-US' }
@@ -34,21 +35,20 @@ function DetailsPage() {
                     // Request 2: Trailers/Videos
                     axios.get(`${API_BASE_URL}/${type}/${decryptedId}/videos`, {
                         params: { api_key: API_KEY, language: 'en-US' }
+                    }),
+                    // Request 3: Credits
+                    axios.get(`${API_BASE_URL}/${type}/${decryptedId}/credits`, {
+                        params: { api_key: API_KEY, language: 'en-US' }
                     })
                 ]);
 
                 setContent(detailsRes.data);
+                setCast(creditsRes.data.cast.slice(0, 20)); // Get top 20 cast members
 
+                // Videos Logic
                 const videos = videosRes.data.results;
-                // Trailer
-                const trailer = videos.find(
-                    (vid) => vid.type === "Trailer" && vid.site === "YouTube"
-                );
-                
-                // Opening Credits
-                const opening = videos.find(
-                    (vid) => vid.type === "Opening Credits" && vid.site === "YouTube"
-                );
+                const trailer = videos.find(vid => vid.type === "Trailer" && vid.site === "YouTube");
+                const opening = videos.find(vid => vid.type === "Opening Credits" && vid.site === "YouTube");
 
                 if (trailer) setTrailerKey(trailer.key);
                 if (opening) setOpeningKey(opening.key);
@@ -100,7 +100,6 @@ function DetailsPage() {
                         {content.runtime && (
                             <span className="runtime"> {Math.floor(content.runtime / 60)}h {content.runtime % 60}m</span>
                         )}
-                        
                         {content.number_of_seasons && (
                             <span className="seasons"> {content.number_of_seasons} Seasons</span>
                         )}
@@ -112,7 +111,7 @@ function DetailsPage() {
                         ))}
                     </div>
                     
-                    {/* Action Buttons */}
+                    {/* Play Trailer And Opening Credits Buttons */}
                     <div className="action-buttons">
                         {trailerKey && (
                             <button className="play-trailer-btn" onClick={() => setPlayingVideo(trailerKey)}>
@@ -131,6 +130,28 @@ function DetailsPage() {
                         <h3>Overview</h3>
                         <p>{content.overview}</p>
                     </div>
+
+                    {/* Top Cast Section */}
+                    {cast.length > 0 && (
+                        <div className="cast-section">
+                            <h3>Top Cast</h3>
+                            <div className="cast-list">
+                                {cast.map((actor) => (
+                                    <div key={actor.id} className="cast-card">
+                                        <div className="cast-img">
+                                            {actor.profile_path ? (
+                                                <img src={`${IMAGE_BASE_URL}${actor.profile_path}`} alt={actor.name} />
+                                            ) : (
+                                                <div className="no-cast-img">👤</div>
+                                            )}
+                                        </div>
+                                        <p className="actor-name">{actor.name}</p>
+                                        <p className="character-name">{actor.character}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
