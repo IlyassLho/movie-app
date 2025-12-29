@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { decodeId } from '../../utils/security';
+import { useParams, useNavigate } from 'react-router-dom';
+import { decodeId, encodeId } from '../../utils/security';
 import axios from 'axios';
 
 import '../../Style/App.css';
@@ -12,6 +12,7 @@ const IMAGE_BACKDROP_URL = 'https://image.tmdb.org/t/p/original';
 
 function DetailsPage() {
     const { type, slug } = useParams();
+    const navigate = useNavigate();
 
     // State Variables
     const [content, setContent] = useState(null);
@@ -20,6 +21,7 @@ function DetailsPage() {
     const [openingKey, setOpeningKey] = useState(null);
     const [playingVideo, setPlayingVideo] = useState(null); 
     const [cast, setCast] = useState([]); 
+    const [similar, setSimilar] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,7 +29,7 @@ function DetailsPage() {
                 const decryptedId = decodeId(slug);
                 if (!decryptedId) throw new Error("Invalid ID");
 
-                const [detailsRes, videosRes, creditsRes] = await Promise.all([
+                const [detailsRes, videosRes, creditsRes, similarRes] = await Promise.all([
                     // Request 1: Details
                     axios.get(`${API_BASE_URL}/${type}/${decryptedId}`, {
                         params: { api_key: API_KEY, language: 'en-US' }
@@ -39,7 +41,11 @@ function DetailsPage() {
                     // Request 3: Credits
                     axios.get(`${API_BASE_URL}/${type}/${decryptedId}/credits`, {
                         params: { api_key: API_KEY, language: 'en-US' }
-                    })
+                    }),
+                    // Request 4: Similar
+                    axios.get(`${API_BASE_URL}/${type}/${decryptedId}/similar`, {
+                        params: { api_key: API_KEY }
+                    }),
                 ]);
 
                 setContent(detailsRes.data);
@@ -49,6 +55,13 @@ function DetailsPage() {
                 const videos = videosRes.data.results;
                 const trailer = videos.find(vid => vid.type === "Trailer" && vid.site === "YouTube");
                 const opening = videos.find(vid => vid.type === "Opening Credits" && vid.site === "YouTube");
+
+                // Similar Movies Logic
+                const validSimilar = similarRes.data.results
+                    .filter(m => m.poster_path)
+                    .slice(0, 10);
+
+                setSimilar(validSimilar);
 
                 if (trailer) setTrailerKey(trailer.key);
                 if (opening) setOpeningKey(opening.key);
@@ -61,7 +74,14 @@ function DetailsPage() {
         };
 
         fetchData();
+        window.scrollTo(0, 0); // Scroll to top on page change
     }, [type, slug]);
+
+    // Handle click on similar movie
+    const handleSimilarClick = (id) => {
+        const newSlug = encodeId(id);
+        navigate(`/${type}/${newSlug}`);
+    };
 
     if (loading) return <div className="loading-message">Loading...</div>;
     if (!content) return <div className="error-message">Content not found.</div>;
@@ -147,6 +167,24 @@ function DetailsPage() {
                                         </div>
                                         <p className="actor-name">{actor.name}</p>
                                         <p className="character-name">{actor.character}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Similar Movies Section */}
+                    {similar.length > 0 && (
+                        <div className="similar-section">
+                            <h3>More Like This</h3>
+                            <div className="similar-list">
+                                {similar.map((movie) => (
+                                    <div 
+                                        key={movie.id} 
+                                        className="similar-card" 
+                                        onClick={() => handleSimilarClick(movie.id)}
+                                    >
+                                        <img src={`${IMAGE_BASE_URL}${movie.poster_path}`} alt={movie.title} />
                                     </div>
                                 ))}
                             </div>
