@@ -44,7 +44,6 @@ function HomePage() {
 
       } catch (error) {
         console.error("Error fetching data:", error);
-
       } finally {
         setLoading(false);
       }
@@ -53,22 +52,20 @@ function HomePage() {
     fetchData();
   }, []);
 
-  if (loading) return <div className="loading-message">Loading content...</div>;
-
   return (
     <div className="home-page">
 
       {/* Movies */}
-      <Row title="Trending Movies" data={trendingMovies} />
-      <Row title="Popular Movies" data={popularMovies} />
-      <Row title="Top Rated Movies" data={topRatedMovies} />
+      <Row title="Trending Movies" data={trendingMovies} loading={loading} />
+      <Row title="Popular Movies" data={popularMovies} loading={loading} />
+      <Row title="Top Rated Movies" data={topRatedMovies} loading={loading} />
 
       {/* TV Shows */}
-      <Row title="Trending TV Shows" data={trendingTV} isTV={true} />
-      <Row title="Popular TV Shows" data={popularTV} isTV={true} />
-      <Row title="Top Rated TV Shows" data={topRatedTV} isTV={true} />
+      <Row title="Trending TV Shows" data={trendingTV} isTV={true} loading={loading} />
+      <Row title="Popular TV Shows" data={popularTV} isTV={true} loading={loading} />
+      <Row title="Top Rated TV Shows" data={topRatedTV} isTV={true} loading={loading} />
 
-    </div >
+    </div>
   );
 }
 
