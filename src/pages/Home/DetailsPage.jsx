@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { decodeId, encodeId } from '../../utils/security';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToWatchlist, removeFromWatchlist } from '../../redux/watchlistSlice';
 import axios from 'axios';
 
 import '../../Style/App.css';
@@ -23,6 +25,12 @@ function DetailsPage() {
     const [cast, setCast] = useState([]); 
     const [similar, setSimilar] = useState([]);
 
+    // Redux State Management
+    const dispatch = useDispatch();
+    const watchlist = useSelector((state) => state.watchlist.movies);
+    const isInWatchlist = content ? watchlist.some(movie => movie.id === content.id) : false;
+
+    // Data Fetching Logic
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -76,6 +84,25 @@ function DetailsPage() {
         fetchData();
         window.scrollTo(0, 0); // Scroll to top on page change
     }, [type, slug]);
+
+    const handleToggleWatchlist = () => {
+        // Check if content is available
+        if (content) {
+            const movieData = {
+                id: content.id,
+                title: content.title || content.name,
+                poster_path: content.poster_path,
+                vote_average: content.vote_average,
+                media_type: type
+            };
+
+            if (isInWatchlist) {
+                dispatch(removeFromWatchlist(movieData));
+            } else {
+                dispatch(addToWatchlist(movieData));
+            }
+        }
+    };
 
     // Handle click on similar movie
     const handleSimilarClick = (id) => {
@@ -133,6 +160,17 @@ function DetailsPage() {
                     
                     {/* Play Trailer And Opening Credits Buttons */}
                     <div className="action-buttons">
+                        <button 
+                            className="play-trailer-btn" 
+                            onClick={handleToggleWatchlist}
+                            style={{ 
+                                backgroundColor: isInWatchlist ? "rgba(100,100,100,0.5)" : "var(--color-primary)",
+                                color: "white"
+                            }}
+                        >
+                            {isInWatchlist ? "💔 Remove" : "❤️ Add to List"}
+                        </button>
+                        
                         {trailerKey && (
                             <button className="play-trailer-btn" onClick={() => setPlayingVideo(trailerKey)}>
                                 ▶ Play Trailer
