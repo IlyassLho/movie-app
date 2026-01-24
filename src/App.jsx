@@ -6,6 +6,7 @@ import Footer from './pages/components/Footer/Footer';
 import HomePage from './pages/Home/HomePage';
 import DetailsPage from './pages/Home/DetailsPage';
 import SearchPage from './pages/Home/SearchPage';
+import Watchlist from './pages/WatchlistPage';
 // Styles
 import './Style/App.css';
 
@@ -19,7 +20,7 @@ function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/:type/:slug" element={<DetailsPage />} />
-
+            <Route path="/watchlist" element={<Watchlist />} />
           </Routes>
         </main>
         <Footer />
