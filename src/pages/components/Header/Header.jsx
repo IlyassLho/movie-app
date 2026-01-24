@@ -1,4 +1,4 @@
-import { useState, useEffect , useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 
@@ -11,7 +11,8 @@ function Header() {
   // Debounce Search
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      
+
+      // if search query is not empty, navigate to search page
       if (searchQuery.trim() !== '') {
         navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
       } else {
@@ -22,9 +23,9 @@ function Header() {
     }, 700);
 
     return () => clearTimeout(delayDebounceFn);
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery]); 
+  }, [searchQuery]);
 
   // Clear Search on Navigation Away from Search Page
   useEffect(() => {
@@ -49,8 +50,8 @@ function Header() {
   return (
     <header className="main-header">
       <div className="logo">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           onClick={() => setSearchQuery('')}
           style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}
         >
@@ -72,6 +73,17 @@ function Header() {
           Search
         </button>
       </form>
+
+      {/* Watchlist Button */}
+      <div className="watchlist-container">
+        <Link to="/watchlist" className="watchlist-btn">
+          {/* Mobile Icon (Only visible on mobile) */}
+          <span className="mobile-heart-icon">💙</span> 
+          
+          {/* Desktop Text (Only visible on PC) */}
+          <span className="desktop-text">My List</span>
+        </Link>
+      </div>
     </header>
   );
 }
