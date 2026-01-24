@@ -194,19 +194,19 @@ function DetailsPage() {
                         <div className="cast-section">
                             <h3>Top Cast</h3>
                             <div className="cast-list">
-                                {cast.map((actor) => (
-                                    <div key={actor.id} className="cast-card">
-                                        <div className="cast-img">
-                                            {actor.profile_path ? (
-                                                <img src={`${IMAGE_BASE_URL}${actor.profile_path}`} alt={actor.name} />
-                                            ) : (
-                                                <div className="no-cast-img">👤</div>
-                                            )}
-                                        </div>
-                                        <p className="actor-name">{actor.name}</p>
-                                        <p className="character-name">{actor.character}</p>
-                                    </div>
-                                ))}
+                                {cast.map((actor) => {
+                                    if (actor.profile_path) {
+                                        return (
+                                            <div key={actor.id} className="cast-card">
+                                                <div className="cast-img">
+                                                    <img src={`${IMAGE_BASE_URL}${actor.profile_path}`} alt={actor.name} />
+                                                </div>
+                                                <p className="actor-name">{actor.name}</p>
+                                                <p className="character-name">{actor.character}</p>
+                                            </div>
+                                        )
+                                    }
+                                })} 
                             </div>
                         </div>
                     )}
