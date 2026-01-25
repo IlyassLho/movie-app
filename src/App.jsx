@@ -8,6 +8,7 @@ import HomePage from './pages/Home/HomePage';
 import DetailsPage from './pages/Home/DetailsPage';
 import SearchPage from './pages/Home/SearchPage';
 import Watchlist from './pages/WatchlistPage';
+import NotFound from './pages/NotFound';
 // Styles
 import './Style/App.css';
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/:type/:slug" element={<DetailsPage />} />
             <Route path="/watchlist" element={<Watchlist />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />
