@@ -4,6 +4,7 @@ import { decodeId, encodeId } from '../../utils/security';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToWatchlist, removeFromWatchlist } from '../../redux/watchlistSlice';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 import '../../Style/App.css';
 
@@ -98,8 +99,10 @@ function DetailsPage() {
 
             if (isInWatchlist) {
                 dispatch(removeFromWatchlist(movieData));
+                toast.error("Removed from list 💔");
             } else {
                 dispatch(addToWatchlist(movieData));
+                toast.success("Added to list ❤️");
             }
         }
     };
