@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 // Components
 import Header from './pages/components/Header/Header';
 import Footer from './pages/components/Footer/Footer';
@@ -15,6 +16,7 @@ function App() {
     <BrowserRouter>
       <div className="app-container">
         <Header />
+        <Toaster />
         <main className="main-content">
           <Routes>
             <Route path="/search" element={<SearchPage />} />
