@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Row from '../components/Row';
-import '../../Style/Home.css';
 
 // API Settings 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
@@ -53,7 +52,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="home-page">
+    <div className="bg-ily-dark text-white pb-12 overflow-x-hidden min-h-screen pt-20 md:pt-24">
 
       {/* Movies */}
       <Row title="Trending Movies" data={trendingMovies} loading={loading} />
