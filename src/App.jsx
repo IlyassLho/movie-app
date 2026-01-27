@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 // Components
-import Header from './pages/components/Header/Header';
-import Footer from './pages/components/Footer/Footer';
+import Header from './pages/components/Header';
+import Footer from './pages/components/Footer';
 // Pages
 import HomePage from './pages/Home/HomePage';
 import DetailsPage from './pages/Home/DetailsPage';
@@ -15,10 +15,10 @@ import './Style/App.css';
 function App() {
   return (
     <BrowserRouter>
-      <div className="app-container">
+      <div className="flex flex-col min-h-screen bg-ily-dark text-white"> 
         <Header />
         <Toaster />
-        <main className="main-content">
+        <main className="flex-1 w-full flex flex-col">
           <Routes>
             <Route path="/search" element={<SearchPage />} />
             <Route path="/" element={<HomePage />} />
