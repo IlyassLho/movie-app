@@ -9,6 +9,7 @@ import DetailsPage from './pages/Home/DetailsPage';
 import SearchPage from './pages/Home/SearchPage';
 import Watchlist from './pages/WatchlistPage';
 import NotFound from './pages/NotFound';
+import PersonPage from './pages/Home/ActorPage';
 // Styles
 import './Style/App.css';
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/:type/:slug" element={<DetailsPage />} />
+            <Route path="/person/:slug" element={<PersonPage />} />
             <Route path="/watchlist" element={<Watchlist />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
