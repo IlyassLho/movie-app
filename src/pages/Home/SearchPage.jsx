@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { encodeId } from '../../utils/security';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_API_KEY;
@@ -15,6 +16,7 @@ function SearchPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         const fetchSearchResults = async () => {
             if (!query) {
                 setResults([]);
@@ -50,6 +52,8 @@ function SearchPage() {
         return () => clearTimeout(delayDebounce);
 
     }, [query]);
+
+    if (loading) return <LoadingSpinner />
 
     return (
         <div className="min-h-screen bg-ily-dark text-white pt-24 px-4 pb-12">

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { decodeId, encodeId } from '../../utils/security';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToWatchlist, removeFromWatchlist } from '../../redux/watchlistSlice';
+import LoadingSpinner from '../components/LoadingSpinner';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
@@ -13,7 +14,6 @@ const IMAGE_BACKDROP_URL = 'https://image.tmdb.org/t/p/original';
 
 function DetailsPage() {
     const { type, slug } = useParams();
-    const navigate = useNavigate();
 
     // State Variables
     const [content, setContent] = useState(null);
@@ -31,6 +31,7 @@ function DetailsPage() {
 
     // Data Fetching Logic
     useEffect(() => {
+        setLoading(true);
         const fetchData = async () => {
             try {
                 const decryptedId = decodeId(slug);
@@ -105,13 +106,7 @@ function DetailsPage() {
         }
     };
 
-    // Handle click on similar movie
-    const handleSimilarClick = (id) => {
-        const newSlug = encodeId(id);
-        navigate(`/${type}/${newSlug}`);
-    };
-
-    if (loading) return <div className="flex items-center justify-center min-h-screen bg-ily-dark text-white text-xl">Loading...</div>;
+    if (loading) return <LoadingSpinner />
     if (!content) return <div className="flex items-center justify-center min-h-screen bg-ily-dark text-white text-xl">Content not found.</div>;
 
     const title = content.title || content.name;
@@ -209,7 +204,11 @@ function DetailsPage() {
                                 {cast.map((actor) => {
                                     if (actor.profile_path) {
                                         return (
-                                            <div key={actor.id} className="min-w-[100px] w-[100px] text-center flex-shrink-0 group">
+                                            <Link
+                                                to={`/person/${encodeId(actor.id)}`} 
+                                                key={actor.id}
+                                                className="min-w-[100px] w-[100px] text-center flex-shrink-0 group"
+                                            >
                                                 <div className="w-[90px] h-[90px] rounded-full overflow-hidden mx-auto mb-2.5 border-2 border-transparent transition-all duration-300 ease-in-out bg-gray-700 group-hover:border-white group-hover:scale-105">
                                                     <img
                                                         src={`${IMAGE_BASE_URL}${actor.profile_path}`}
@@ -219,7 +218,7 @@ function DetailsPage() {
                                                 </div>
                                                 <p className="text-sm text-white font-bold m-0 whitespace-nowrap overflow-hidden text-ellipsis">{actor.name}</p>
                                                 <p className="text-xs text-gray-400 m-0 whitespace-nowrap overflow-hidden text-ellipsis">{actor.character}</p>
-                                            </div>
+                                            </Link>
                                         )
                                     }
                                 })}
@@ -233,17 +232,17 @@ function DetailsPage() {
                             <h3 className="mb-4 text-xl md:text-2xl text-white border-l-4 border-ily-blue pl-2.5 ml-4 md:ml-0">More Like This</h3>
                             <div className="flex overflow-x-auto pb-4 gap-4 w-full px-4 scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                                 {similar.map((movie) => (
-                                    <div
+                                    <Link
+                                        to={`/${type}/${encodeId(movie.id)}`}
                                         key={movie.id}
                                         className="min-w-[140px] w-[140px] cursor-pointer transition-transform duration-300 ease-in-out rounded-lg overflow-hidden flex-shrink-0 hover:scale-[1.08]"
-                                        onClick={() => handleSimilarClick(movie.id)}
                                     >
                                         <img
                                             src={`${IMAGE_BASE_URL}${movie.poster_path}`}
                                             alt={movie.title || movie.name}
                                             className="w-full h-full object-cover rounded-lg"
                                         />
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
