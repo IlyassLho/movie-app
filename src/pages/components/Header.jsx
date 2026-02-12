@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const inputRef = useRef(null);
@@ -45,9 +46,35 @@ function Header() {
     }
   };
 
+  // Scroll Effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="bg-gray-800 text-white p-4 px-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-0 shadow-lg relative z-[100] pt-4 md:pt-4">
-      {/* Logo - Centered on mobile, left on desktop */}
+    <header 
+      className={`
+        bg-gray-800 pt-4
+        fixed top-0 left-0 w-full z-50 
+        text-white p-4 px-6 
+        flex flex-col md:flex-row md:justify-between md:items-center 
+        gap-2 md:gap-0 
+        transition-all duration-500 ease-in-out
+        ${isScrolled && (
+          'bg-ily-dark/95 shadow-lg backdrop-blur-sm py-4'
+        )}
+      `}
+    >
+      {/* Logo */}
       <div className="text-2xl md:text-3xl font-bold flex items-center order-1 md:order-none mx-auto md:mx-0">
         <Link
           to="/"
@@ -66,11 +93,18 @@ function Header() {
           placeholder="Titles..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="py-2 px-3 border border-gray-600 rounded-full bg-gray-700 text-gray-300 w-full md:w-[350px] transition-all duration-300 ease-in-out focus:outline-none focus:border-ily-blue focus:bg-gray-600"
+          className={`
+            py-2 px-3 rounded-full text-white w-full md:w-[350px] 
+            transition-all duration-300 ease-in-out focus:outline-none focus:border-ily-blue
+            ${isScrolled 
+              ? 'bg-gray-700 border border-gray-600'
+              : 'bg-black/50 border border-gray-500/50 backdrop-blur-md'
+            }
+          `}
         />
         <button 
           type="submit" 
-          className="py-2 px-4 border-none rounded-full cursor-pointer font-semibold text-white bg-ily-gradient transition-all duration-300 ease-in-out hover:scale-105 hover:brightness-110"
+          className="hidden md:block py-2 px-4 border-none rounded-full cursor-pointer font-semibold text-white bg-ily-gradient transition-all duration-300 ease-in-out hover:scale-95 hover:brightness-95"
         >
           Search
         </button>
@@ -79,14 +113,14 @@ function Header() {
       {/* Watchlist Button */}
       <div className="absolute top-0 left-0 md:relative md:top-0 md:left-0 z-10 md:z-auto flex items-center order-0 md:order-none">
         <Link 
-          to="/watchlist" 
-          className="no-underline text-white py-2 px-2 md:border-2 md:border-ily-blue border-none rounded-full font-semibold transition-all duration-300 ease-in-out flex items-center gap-2 bg-transparent relative p-0 md:p-2 text-3xl md:text-base hover:scale-110 md:hover:scale-105 md:hover:bg-ily-gradient md:hover:border-transparent md:hover:shadow-[0_4px_8px_rgba(54,189,242,0.3)]"
+          to="/watchlist"
+          className="no-underline  font-semibold transition-all duration-300 ease-in-out flex items-center gap-2 bg-transparent relative p-0 text-3xl md:text-base"
         >
           {/* Mobile Icon (Only visible on mobile) */}
-          <span className="block md:hidden bg-clip-text text-transparent bg-ily-gradient font-bold drop-shadow-[0_2px_3px_rgba(0,0,0,0.3)]">💙</span> 
+          <span className="block md:hidden py-2 px-2 bg-clip-text text-transparent bg-ily-gradient font-bold drop-shadow-[0_2px_3px_rgba(0,0,0,0.3)]">💙</span> 
           
           {/* Desktop Text (Only visible on PC) */}
-          <span className="hidden md:block">My List</span>
+          <span className="hidden md:block py-2 px-4 border-none rounded-full cursor-pointer font-semibold text-white bg-ily-gradient transition-all duration-300 ease-in-out hover:scale-95 hover:brightness-110">My List</span>
         </Link>
       </div>
     </header>
