@@ -32,8 +32,8 @@ Follow these steps to run the project locally:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/IlyassLho/movie-app.git
-   cd movie-app
+   git clone https://github.com/lilyaaas/Frontend-movie-app.git
+   cd Frontend-movie-app
    ```
 
 2. **Install dependencies:**
